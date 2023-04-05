@@ -19,7 +19,7 @@ public class Url {
     @GenericGenerator(name = RandomLongGenerator.generatorName, strategy = "com.amarin.urlshortenerapi.entity.RandomLongGenerator")
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String longUrl;
 
     @Column(nullable = false)
