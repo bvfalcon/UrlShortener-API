@@ -11,11 +11,9 @@ import java.util.Date;
 public class UrlService {
 
     private final UrlRepository urlRepository;
-    private final BaseConversion conversion;
 
-    public UrlService(UrlRepository urlRepository, BaseConversion baseConversion) {
+    public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
-        this.conversion = baseConversion;
     }
 
     public String convertToShortUrl(String longUrl) {
@@ -24,11 +22,11 @@ public class UrlService {
         url.setCreatedDate(new Date());
         var entity = urlRepository.save(url);
 
-        return conversion.encode(entity.getId());
+        return BaseConversion.encode(entity.getId());
     }
 
     public String getOriginalUrl(String shortUrl) {
-        var id = conversion.decode(shortUrl);
+        var id = BaseConversion.decode(shortUrl);
         var entity = urlRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("There is no entity with " + shortUrl));
 
