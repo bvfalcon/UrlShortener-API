@@ -1,14 +1,22 @@
 package com.amarin.urlshortenerapi.entity;
 
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "url")
 public class Url {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = RandomLongGenerator.generatorName)
+    @GenericGenerator(name = RandomLongGenerator.generatorName, strategy = "com.amarin.urlshortenerapi.entity.RandomLongGenerator")
     private long id;
 
     @Column(nullable = false)
@@ -16,9 +24,6 @@ public class Url {
 
     @Column(nullable = false)
     private Date createdDate;
-
-    private Date expiresDate;
-
 
     public long getId() {
         return id;
@@ -45,11 +50,8 @@ public class Url {
         this.createdDate = createdDate;
     }
 
-    public Date getExpiresDate() {
-        return expiresDate;
-    }
-
-    public void setExpiresDate(Date expireDate) {
-        this.expiresDate = expireDate;
+    @Override
+    public String toString() {
+        return "Url [id=" + id + ", longUrl=" + longUrl + ", createdDate=" + createdDate + "]";
     }
 }

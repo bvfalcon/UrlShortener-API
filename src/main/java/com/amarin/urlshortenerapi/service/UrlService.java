@@ -1,6 +1,5 @@
 package com.amarin.urlshortenerapi.service;
 
-import com.amarin.urlshortenerapi.dto.UrlLongRequest;
 import com.amarin.urlshortenerapi.entity.Url;
 import com.amarin.urlshortenerapi.repository.UrlRepository;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,9 @@ public class UrlService {
         this.conversion = baseConversion;
     }
 
-    public String convertToShortUrl(UrlLongRequest request) {
+    public String convertToShortUrl(String longUrl) {
         var url = new Url();
-        url.setLongUrl(request.getLongUrl());
-        url.setExpiresDate(request.getExpiresDate());
+        url.setLongUrl(longUrl);
         url.setCreatedDate(new Date());
         var entity = urlRepository.save(url);
 
@@ -33,11 +31,6 @@ public class UrlService {
         var id = conversion.decode(shortUrl);
         var entity = urlRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("There is no entity with " + shortUrl));
-
-        if (entity.getExpiresDate() != null && entity.getExpiresDate().before(new Date())){
-            urlRepository.delete(entity);
-            throw new EntityNotFoundException("Link expired!");
-        }
 
         return entity.getLongUrl();
     }
